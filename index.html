@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#101820">
+  <title>Road Drive</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main id="game">
+    <header class="hud">
+      <div class="brand">ROAD <b>DRIVE</b></div>
+      <div class="stats"><span> SPEED <b id="speed">0</b></span><span> SCORE <b id="score">0</b></span><button id="musicBtn" class="music-btn">♫ ON</button></div>
+    </header>
+    <canvas id="screen" aria-label="Car driving game"></canvas>
+    <section id="startPanel" class="panel">
+      <h1>ROAD DRIVE</h1>
+      <p>Drive through traffic. Avoid other cars and see how far you can go.</p>
+      <button id="startBtn">START DRIVING</button>
+      <small>Use ◀ ▶ buttons or keyboard arrows</small>
+    </section>
+    <section id="gameOver" class="panel hidden">
+      <h1>CRASH!</h1>
+      <p>Your score: <b id="finalScore">0</b></p>
+      <button id="retryBtn">DRIVE AGAIN</button>
+    </section>
+    <div class="controls">
+      <button id="leftBtn" aria-label="Steer left">◀</button>
+      <button id="rightBtn" aria-label="Steer right">▶</button>
+      <div class="pedals">
+        <button id="brakeBtn" aria-label="Brake">BRAKE</button>
+        <button id="gasBtn" aria-label="Accelerate">GAS ▲</button>
+      </div>
+    </div>
+    <audio id="bgMusic" src="/music.mp3" loop preload="auto"></audio>
+  </main>
+  <script src="/game.js"></script>
+  <script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js"));</script>
+</body>
+</html>
