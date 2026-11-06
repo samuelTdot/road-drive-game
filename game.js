@@ -11,7 +11,7 @@ const musicBtn = document.getElementById('musicBtn');
 let W = 0, H = 0, dpr = 1;
 let playing = false, score = 0, speed = 0, playerX = 0.5;
 let traffic = [], roadOffset = 0, last = 0, spawnTimer = 0, musicOn = true;
-const MAX_SPEED = 140, FAR_DISTANCE = 190;
+const MAX_SPEED = 140, FAR_DISTANCE = 300;
 const keys = { left: false, right: false, gas: false, brake: false };
 
 function resize() {
@@ -121,7 +121,7 @@ function spawnTraffic() {
   const colors=['#e84a4a','#438de0','#f0d34e','#9b70c9','#e7e7e7'];
   const cruise=48+Math.random()*62;
   traffic.push({
-    lanePosition:lane,targetLane:lane,distance:145+Math.random()*38,
+    lanePosition:lane,targetLane:lane,distance:265+Math.random()*28,
     speed:cruise,desiredSpeed:cruise,acceleration:5+Math.random()*5,
     color:colors[Math.floor(Math.random()*colors.length)],
     size:.88+Math.random()*.18,changeCooldown:2+Math.random()*4
@@ -167,8 +167,8 @@ function updateTraffic(dt) {
 function loop(now) {
   if(!playing) return;
   const dt=Math.min((now-last)/1000,.05); last=now;
-  if(keys.gas) speed=Math.min(MAX_SPEED,speed+34*dt);
-  else speed=Math.max(0,speed-4.5*dt);
+  if(keys.gas) speed=Math.min(MAX_SPEED,speed+46*dt);
+  else speed=Math.max(0,speed-3.5*dt);
   if(keys.brake) speed=Math.max(0,speed-72*dt);
   const steering=.62+speed/95;
   if(keys.left) playerX-=.52*dt*steering;
@@ -184,12 +184,14 @@ function loop(now) {
   }
 
   const py=H*.78, pw=Math.max(34,W*.095), ph=pw*1.55;
+  // Convert the player's fixed screen position into the traffic distance scale.
+  const playerDistance=FAR_DISTANCE*(1-(.78-.16)/.84);
   for(const v of traffic) {
-    if(v.distance<0||v.distance>16) continue;
+    if(Math.abs(v.distance-playerDistance)>7.5) continue;
     const y=projectDistance(v.distance), x=trafficX(v,y);
     const depth=1-v.distance/FAR_DISTANCE;
     const otherW=pw*(.38+.78*depth)*v.size;
-    if(Math.abs(x-W*playerX)<(otherW+pw)*.34&&Math.abs(y-py)<ph*.72) {
+    if(Math.abs(x-W*playerX)<(otherW+pw)*.38) {
       end(); return;
     }
   }
